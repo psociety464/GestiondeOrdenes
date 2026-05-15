@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestión de Órdenes</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
+</head>
+<body>
+
+  <div class="app">
+
+    <!-- HEADER -->
+    <div class="header">
+      <i class="ti ti-calendar-event header-icon"></i>
+      <div>
+        <div class="header-title">Gestión de Órdenes</div>
+        <div class="header-sub">By.Psociety.sv</div>
+      </div>
+      <div class="header-badges" id="summary-badges"></div>
+    </div>
+
+    <!-- MAIN GRID -->
+    <div class="main">
+
+      <!-- COLUMNA IZQUIERDA -->
+      <div class="left">
+
+        <!-- UPLOAD -->
+        <div class="card">
+          <div class="section-lbl">Cargar archivo Excel</div>
+          <div class="upload-area" id="drop-area" onclick="document.getElementById('file-inp').click()">
+            <i class="ti ti-upload upload-icon"></i>
+            <div class="upload-label"><strong>Haz clic para seleccionar</strong> o arrastra tu Excel aquí</div>
+            <div class="upload-hint">Columnas requeridas: número de orden · estado de orden · orden (fecha)</div>
+          </div>
+          <input type="file" id="file-inp" accept=".xlsx,.xls,.csv" />
+          <div id="file-status" class="file-status"></div>
+          <button class="btn-sample" onclick="loadSample()">
+            <i class="ti ti-database"></i> Cargar datos de ejemplo
+          </button>
+        </div>
+
+        <!-- CALENDARIO -->
+        <div class="card">
+          <div class="cal-nav">
+            <button class="cal-nav-btn" onclick="changeMonth(-1)" aria-label="Mes anterior">
+              <i class="ti ti-chevron-left"></i>
+            </button>
+            <div>
+              <span class="cal-month" id="cal-month-lbl"></span>
+              <span class="cal-year" id="cal-year-lbl"></span>
+            </div>
+            <div class="cal-units" id="cal-units-lbl"></div>
+            <button class="cal-nav-btn" onclick="changeMonth(1)" aria-label="Mes siguiente">
+              <i class="ti ti-chevron-right"></i>
+            </button>
+          </div>
+          <div class="legend">
+            <button class="leg-btn active" id="filter-ok"    onclick="toggleFilter('ok')"   aria-pressed="true">
+              <div class="leg-box leg-green"></div>Órdenes al día
+            </button>
+            <button class="leg-btn active" id="filter-late"  onclick="toggleFilter('late')" aria-pressed="true">
+              <div class="leg-box leg-red"></div>Órdenes atrasadas
+            </button>
+            <button class="leg-btn active" id="filter-today" onclick="toggleFilter('today')" aria-pressed="true">
+              <div class="leg-box leg-today"></div>Hoy
+            </button>
+          </div>
+          <div class="cal-grid" id="cal-grid"></div>
+        </div>
+
+        <!-- TABLA -->
+        <div class="card">
+          <div class="table-header-row">
+            <div class="table-title" id="table-title">Todas las órdenes</div>
+            <div class="search-wrap">
+              <i class="ti ti-search search-icon"></i>
+              <input
+                type="text"
+                id="search-input"
+                class="search-input"
+                placeholder="Buscar orden, estado o fecha…"
+                oninput="onSearch(this.value)"
+                autocomplete="off"
+              />
+              <button class="search-clear" id="search-clear" onclick="clearSearch()" title="Limpiar búsqueda" style="display:none">
+                <i class="ti ti-x"></i>
+              </button>
+            </div>
+          </div>
+          <div id="table-wrap">
+            <div class="no-data">
+              <i class="ti ti-table-off no-data-icon"></i>
+              Carga un Excel para ver las órdenes
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- COLUMNA DERECHA -->
+      <div class="right">
+
+        <!-- ALERTAS -->
+        <div class="card">
+          <div class="alert-title">
+            <i class="ti ti-alert-circle alert-icon"></i>
+            Alertas de órdenes atrasadas
+          </div>
+          <div id="alerts-wrap">
+            <div class="alert-empty">
+              <i class="ti ti-check" style="font-size:20px;display:block;margin-bottom:4px"></i>
+              Sin atrasos detectados
+            </div>
+          </div>
+        </div>
+
+        <!-- DETALLE DEL DÍA -->
+        <div class="card">
+          <div class="day-detail-title" id="detail-title">Selecciona un día</div>
+          <div id="detail-wrap">
+            <div class="no-data" style="padding:1rem">
+              Haz clic en un día con órdenes para ver el detalle
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- SheetJS para leer Excel -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
